@@ -14,6 +14,13 @@ else:
     MODEL = "gpt-4o-mini"
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+SYSTEM_PROMPT = """ You are a coding assistant running in the terminal and help the software engineers in building code.
+
+You are precise and give pointed answers. You dont have access to any tools right now and if there is something you can'd do please say
+so plainly.
+
+Your code examples are given within proper code indents.
+"""
 
 def run():
     """RUn the agent's conversation loop until the user quits"""
@@ -21,7 +28,7 @@ def run():
     # The conversation history. This is the entire memory of the agent.
     # Every turn, we append to it and send the whole thing to the model.
 
-    messages =  []
+    messages =  [{"role" : "system", "content" : SYSTEM_PROMPT}]
 
     print("Agent ready. Type 'quit' or 'exit' to leave. /n")
 
