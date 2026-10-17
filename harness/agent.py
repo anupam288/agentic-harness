@@ -4,12 +4,19 @@ from openai import OpenAI
 
 load_dotenv()
 
-MODEL = "gpt-4o-mini"
+if(os.getenv("KIMI_API_KEY")):
+    MODEL = "kimi-k2.6"
+    client = OpenAI(api_key = os.getenv("KIMI_API_KEY"),
+                    base_url = os.getenv("KIMI_BASE_URL"))
 
-client = OpenAI()
+    EXTRA_BODY = {"thinking" : {"type" : "disabled"}}
+else:
+    MODEL = "gpt-4o-mini"
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
 
 def run():
-    """RUn the agent's conversation lopp until the user quites"""
+    """RUn the agent's conversation loop until the user quits"""
 
     # The conversation history. This is the entire memory of the agent.
     # Every turn, we append to it and send the whole thing to the model.
@@ -42,7 +49,7 @@ def run():
         assistant_message = response.choices[0].message.content
         messages.append({"role" : "assistant", "content" : assistant_message})
 
-        print(f"/nagent> {assistant_message}/n")
+        print(f"\nagent> {assistant_message}\n")
 
 if __name__ == "__main__":
     run()
